@@ -25,102 +25,17 @@ jobs:
         with:
           access_token: ${{ github.token }}
 
-  lint:
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-node@v3.4.1
-        with:
-          cache: 'npm'
-          node-version: "${{env.NODE_ENGINE}}"
-          # registry-url: 'https://npm.pkg.github.com'
-      - name: Install dependencies
-        run: |
-          # npm config set '//npm.pkg.github.com/:_authToken' "${GITHUB_PAT}" --userconfig .npmrc
-          npm ci
-      - name: Lint
-        run: npm run eslint
-
-  build:
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-node@v3.4.1
-        with:
-          cache: 'npm'
-          node-version: "${{env.NODE_ENGINE}}"
-          #registry-url: 'https://npm.pkg.github.com'
-      - name: Install dependencies
-        run: |
-          # npm config set '//npm.pkg.github.com/:_authToken' "${GITHUB_PAT}" --userconfig .npmrc
-          npm ci
-      - name: Build
-        run: npm run build
-      - uses: actions/upload-artifact@v3.1.0
-        with:
-          name: dist
-          path: dist
-
   test:
-    needs: [lint, build]
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-node@v3.4.1
-        with:
-          cache: 'npm'
-          node-version: "${{env.NODE_ENGINE}}"
-          #registry-url: 'https://npm.pkg.github.com'
-      - name: Install dependencies
-        run: |
-          # npm config set '//npm.pkg.github.com/:_authToken' "${GITHUB_PAT}" --userconfig .npmrc
-          npm ci
-      - uses: actions/download-artifact@v3
-        with:
-          name: dist
-          path: dist
-      - name: Test
-        run: npm test
-
-
-  # e2e:
-  #   needs: [lint, build]
-  #   runs-on: ubuntu-22.04
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #       with:
-  #         fetch-depth: 0
-  #     # Setup .npmrc file to install packages
-  #     - uses: actions/setup-node@v3.4.1
-  #       with:
-  #         cache: 'npm'
-  #         node-version: "${{env.NODE_ENGINE}}"
-  #         #registry-url: 'https://npm.pkg.github.com'
-  #     - name: Install dependencies
-  #       run: |
-  #         # npm config set '//npm.pkg.github.com/:_authToken' "${GITHUB_PAT}" --userconfig .npmrc
-  #         npm ci
-  #     - uses: actions/download-artifact@v3
-  #       with:
-  #         name: dist
-  #         path: dist
-  #     - name: E2E tests
-  #       uses: cypress-io/github-action@v4.2.0
-  #       with:
-  #         command: npm run test:e2e
-  #         start: npm run start-test
-  #         wait-on: http://localhost:5000
+    uses: alexisromagnoli/pokedex-for-ci/.github/workflows/common.yml@main
+    with: 
+      node-engine: ${{env.NODE_ENGINE}}
 
   deploy:
     #needs: [test, e2e]
     needs: [test]
     runs-on: ubuntu-22.04
+    # environment: 
+    #   production
     steps:
       - uses: actions/checkout@v3
         with:
