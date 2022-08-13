@@ -28,7 +28,7 @@ jobs:
   test:
     uses: alexisromagnoli/pokedex-for-ci/.github/workflows/common.yml@main
     with: 
-      node-engine: ${{env.NODE_ENGINE}}
+      node-engine: "${{env.NODE_ENGINE}}"
 
   deploy:
     #needs: [test, e2e]
