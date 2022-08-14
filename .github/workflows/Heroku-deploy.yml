@@ -26,10 +26,9 @@ jobs:
           access_token: ${{ github.token }}
 
   test:
-    uses: alexisromagnoli/pokedex-for-ci/.github/workflows/common.yml@main
+    uses: ./.github/workflows/common.yml
     with: 
-      node-engine: "${NODE_ENGINE}"
-      #node-engine: "14.17.1"
+      node-engine: "14.17.1"
 
   deploy:
     #needs: [test, e2e]
