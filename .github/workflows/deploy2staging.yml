@@ -2,9 +2,9 @@ name: Heroku-deploy
 
 on:
   push:
-    branches: [main]
+    branches: [develop]
   pull_request:
-    branches: [main]
+    branches: [develop]
     # Run jobs for every PR
     # branches: '*'
     types: [opened, synchronize]
@@ -34,8 +34,8 @@ jobs:
     #needs: [test, e2e]
     needs: [test]
     runs-on: ubuntu-22.04
-    # environment: 
-    #   production
+    environment: 
+      staging
     steps:
       - uses: actions/checkout@v3
         with:
